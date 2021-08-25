@@ -23,8 +23,9 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: {{ $serviceName }}
-          servicePort: 80
+          name: {{ $serviceName }}
+          port:
+            number: 80
   {{- end -}}
 {{- if .Values.dashboard.ingress.tls }}
   tls:
