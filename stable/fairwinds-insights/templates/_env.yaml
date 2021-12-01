@@ -49,6 +49,10 @@ env:
 - name: AUTH_RATE_LIMIT
   value: {{ . | quote }}
 {{- end }}
+{{- if .Values.postgresql.ephemeral }}
+- name: SKIP_COMPLIANCE_CHECKS_LOAD
+  value: "true"
+{{- end }}
 # Database
 - name: POSTGRES_DB
   value: {{ .Values.postgresql.postgresqlDatabase }}
