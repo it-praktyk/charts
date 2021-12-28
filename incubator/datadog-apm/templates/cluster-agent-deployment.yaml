@@ -67,7 +67,8 @@ spec:
       imagePullSecrets:
 {{ toYaml .Values.clusterAgent.image.pullSecrets | indent 8 }}
       {{- end }}
-      serviceAccountName: {{ if .Values.clusterAgent.rbac.create }}"{{ template "datadog-apm.fullname" . }}"{{ else }}"{{ .Values.clusterAgent.rbac.serviceAccountName }}"{{ end }}
+      # serviceAccountName: {{ if .Values.clusterAgent.rbac.create }}"{{ template "datadog-apm.fullname" . }}"{{ else }}"{{ .Values.clusterAgent.rbac.serviceAccountName }}"{{ end }}
+      serviceAccountName: {{ .Values.clusterAgent.rbac.serviceAccountName }}
       {{- if .Values.clusterAgent.useHostNetwork }}
       hostNetwork: {{ .Values.clusterAgent.useHostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
@@ -182,7 +183,7 @@ spec:
                 name: {{ template "clusterAgent.tokenSecretName" . }}
                 key: token
           - name: DD_KUBE_RESOURCES_NAMESPACE
-            value: {{ .Values.namespace }}
+            value: {{ .Release.Namespace }}
           - name: DD_ORCHESTRATOR_EXPLORER_ENABLED
             value: {{ .Values.datadog.orchestratorExplorer.enabled | quote }}
           {{- if  .Values.datadog.orchestratorExplorer.enabled }}
@@ -221,6 +222,10 @@ spec:
             mountPath: /etc/datadog-agent/install_info
             {{- end }}
             readOnly: true
+          - name: datadog-yaml
+            mountPath: /etc/datadog-agent/datadog.yaml
+            subPath: datadog.yaml
+            readOnly: true
 {{- if .Values.clusterAgent.volumeMounts }}
 {{ toYaml .Values.clusterAgent.volumeMounts | indent 10 }}
 {{- end }}
@@ -244,6 +249,9 @@ spec:
         - name: installinfo
           configMap:
             name: {{ template "datadog-apm.fullname" . }}-installinfo
+        - name: datadog-yaml
+          configMap:
+            name: {{ template "datadog-apm.fullname" . }}-datadog-yaml
 {{- if .Values.clusterAgent.confd }}
         - name: confd
           configMap:

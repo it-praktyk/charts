@@ -16,4 +16,6 @@ data:
     install_method:
       tool: helm
       tool_version: {{ .Release.Service }}
-      installer_version: {{ .Chart.Name }}-{{ .Chart.Version }}
+      installer_version: datadog-{{ .Chart.Version }}
+
+# installer_version: {{ .Chart.Name }}-{{ .Chart.Version }}

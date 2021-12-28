@@ -1,0 +1,6 @@
+apiVersion: v2
+name: samtest-dd-apm
+description: A modified datadog-apm chart for fairwinds
+type: application
+version: 1.0.0
+appVersion: "1.16.0"

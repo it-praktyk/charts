@@ -8,6 +8,7 @@ targetSystem: linux
 namespace: default   # Need to override this value with datadog
 
 agents:
+  useConfigMap: true
   rbac:
     create: true
 
@@ -23,7 +24,9 @@ datadog:
   securityAgent:
     compliance:
       enabled: false
-  logLevel: INFO
+  logLevel: TRACE # INFO
+  clusterName: samkind
+
 
 clusterAgent:
   replicas: 1
@@ -32,6 +35,7 @@ clusterAgent:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: 7.23.0
+    doNotCheckTag: true
   command:
     - trace-agent
     - -config=/etc/datadog-agent/datadog.yaml
@@ -46,10 +50,10 @@ clusterAgent:
     aggregator: avg
     wpaController: false
     useDatadogMetrics: false
-  priorityClassName: fairwinds-critical
+  # priorityClassName: fairwinds-critical
   rbac:
     create: true
-    serviceAccountName: datadog
+    serviceAccountName: datadog-apm-cluster-agent
   admissionController:
     enabled: false
   healthPort: 5555

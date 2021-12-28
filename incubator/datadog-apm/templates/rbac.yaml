@@ -116,7 +116,7 @@ roleRef:
   name: {{ template "datadog-apm.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "datadog-apm.fullname" . }}
+    name: {{ .Values.clusterAgent.rbac.serviceAccountName }}
     namespace: {{ .Values.namespace }}
 ---
 apiVersion: v1
@@ -128,5 +128,5 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-  name: {{ template "datadog-apm.fullname" . }}
+  name: {{ .Values.clusterAgent.rbac.serviceAccountName }}
 {{- end -}}
