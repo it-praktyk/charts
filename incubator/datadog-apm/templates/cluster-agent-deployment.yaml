@@ -15,6 +15,7 @@ spec:
 {{- if .Values.clusterAgent.strategy }}
 {{ toYaml .Values.clusterAgent.strategy | indent 4 }}
 {{- else }}
+    type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
@@ -222,10 +223,6 @@ spec:
             mountPath: /etc/datadog-agent/install_info
             {{- end }}
             readOnly: true
-          - name: datadog-yaml
-            mountPath: /etc/datadog-agent/datadog.yaml
-            subPath: datadog.yaml
-            readOnly: true
 {{- if .Values.clusterAgent.volumeMounts }}
 {{ toYaml .Values.clusterAgent.volumeMounts | indent 10 }}
 {{- end }}
@@ -249,9 +246,6 @@ spec:
         - name: installinfo
           configMap:
             name: {{ template "datadog-apm.fullname" . }}-installinfo
-        - name: datadog-yaml
-          configMap:
-            name: {{ template "datadog-apm.fullname" . }}-datadog-yaml
 {{- if .Values.clusterAgent.confd }}
         - name: confd
           configMap:

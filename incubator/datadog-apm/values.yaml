@@ -24,7 +24,7 @@ datadog:
   securityAgent:
     compliance:
       enabled: false
-  logLevel: TRACE # INFO
+  logLevel: INFO
   clusterName: samkind
 
 
